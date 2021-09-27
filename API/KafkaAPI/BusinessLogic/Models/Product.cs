@@ -1,19 +1,7 @@
-﻿namespace KafkaAPI
-{
-    public enum Categories
-    {
-        Electronics,
-        Grocery,
-        Snacks,
-        Drinks,
-        Furniture
-    }
+﻿using DataAccess.Enums;
 
-    public enum Results 
-    {
-        Success,
-        Failed
-    }
+namespace DataAccess.Models
+{
     public class Product
     {
         public string Name { get; set; }
