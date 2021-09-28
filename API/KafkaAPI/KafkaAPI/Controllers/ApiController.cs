@@ -14,19 +14,22 @@ namespace KafkaAPI.Controllers
     [ApiController]
     public class ApiController : ControllerBase
     {
+        private readonly IProductRepository _productRepository;
+        public ApiController(IProductRepository productRepository)
+        {
+            _productRepository = productRepository;
+        }
+
         [HttpPost]
         public void Post([FromBody] List<Product> products)
         {
-            ProductRepository Products = new();
-            for (int i = 0; i < products.Count; i++)
-            {
-                Products.InsertProduct(products[i]);
-            }
-
+            Producer producer = new();
             DeliveryResult<Null, string> result;
-            for (int i = 0; i < Products.GetProducts().Count(); i++)
+            _productRepository.InsertProducts(products);
+
+            for (int i = 0; i < _productRepository.GetProducts().Count(); i++)
             {
-                result = Producer.ProduceMessage(JsonSerializer.Serialize(products[i]));
+                result = producer.ProduceMessage(JsonSerializer.Serialize(products[i]));
                 Console.WriteLine($"Event sent on Partition: {result.Partition} with Offset: {result.Offset}");
             }
         }
@@ -34,7 +37,7 @@ namespace KafkaAPI.Controllers
         [HttpGet]
         public string Get([FromBody] Results result)
         {
-            ResultsRepository results = new();
+            ResultRepository results = new();
             IEnumerable<Product> filtered = from product in results.GetProducts() where product.Result == result select product;
             return JsonSerializer.Serialize(filtered);
         }

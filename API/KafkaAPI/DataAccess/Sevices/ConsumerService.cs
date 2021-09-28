@@ -10,7 +10,8 @@ namespace KafkaAPI.Services
     {
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            Consumer.StartConsumeMessages();
+            Consumer consumer = new();
+            consumer.StartConsumeMessages();
             return Task.CompletedTask;
         }
 

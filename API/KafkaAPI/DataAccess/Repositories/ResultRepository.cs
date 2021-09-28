@@ -3,26 +3,22 @@ using System.Collections.Generic;
 
 namespace DataAccess.Repositories
 {
-    public class ProductRepository: IProductRepository
+    public class ResultRepository: IResultRepository
     {
-        private static List<Product> Products { get; set; }
-
+        private static List<Product> Results { get; set; }
 
         public IEnumerable<Product> GetProducts()
         {
-            return Products;
+            return Results;
         }
         public Product GetProductByID(int productId)
         {
-            return Products[productId];
+            return Results[productId];
         }
         public void InsertProduct(Product product)
         {
-            if(Products == null)
-            {
-                Products = new();
-            }
-            Products.Add(product);
+            if (Results == null) Results = new();
+            Results.Add(product);
         }
     }
 }

@@ -7,13 +7,15 @@ using System.Threading;
 
 namespace DataAccess.Kafka
 {
-    public static class Consumer
+    public class Consumer
     {
-        public static void StartConsumeMessages()
+        public void StartConsumeMessages()
         {
-            using var consumer = new ConsumerBuilder<Ignore, string>(KafkaConfig.ConsumerConfig).Build();
+            KafkaConfig config = new();
 
-            consumer.Subscribe(KafkaConfig.consumerTopic);
+            using var consumer = new ConsumerBuilder<Ignore, string>(config.ConsumerConfig).Build();
+
+            consumer.Subscribe(config.consumerTopic);
 
             CancellationTokenSource cancellationToken = new();
             Console.CancelKeyPress += (_, e) =>
@@ -42,9 +44,9 @@ namespace DataAccess.Kafka
             }
         }
 
-        private static void OnResult(ConsumeResult<Ignore, string> consumerResult)
+        private void OnResult(ConsumeResult<Ignore, string> consumerResult)
         {
-            ResultsRepository results = new();
+            ResultRepository results = new();
             Console.WriteLine($"Consumed message '{consumerResult?.Message?.Value}' at: '{consumerResult?.TopicPartitionOffset}'.");
             results.InsertProduct(JsonSerializer.Deserialize<Product>(consumerResult.Message.Value));
         }

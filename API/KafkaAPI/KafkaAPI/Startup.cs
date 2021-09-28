@@ -1,3 +1,4 @@
+using DataAccess.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,8 @@ namespace KafkaAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IResultRepository, ResultRepository>();
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
