@@ -14,7 +14,6 @@ namespace DataAccess.Kafka
             KafkaConfig config = new();
 
             using var consumer = new ConsumerBuilder<Ignore, string>(config.ConsumerConfig).Build();
-
             consumer.Subscribe(config.consumerTopic);
 
             CancellationTokenSource cancellationToken = new();
